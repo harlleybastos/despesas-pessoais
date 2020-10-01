@@ -16,8 +16,9 @@ class TransactionList extends StatelessWidget {
         //Mostrar transações criadas em lista
         itemCount:
             transactions.length, //Quantidade de itens a serem renderizados
-        itemBuilder: (ctx, index) { // Chama para renderizar de forma os elementos. Elementos necessários
-          final tr = transactions [index];
+        itemBuilder: (ctx, index) {
+          // Chama para renderizar de forma os elementos. Elementos necessários
+          final tr = transactions[index];
           return Card(
             child: Row(
               children: <Widget>[
@@ -25,7 +26,7 @@ class TransactionList extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   decoration: BoxDecoration(
                       border: Border.all(
-                    color: Colors.purple,
+                    color: Theme.of(context).primaryColor,
                     width: 2,
                   )),
                   padding: EdgeInsets.all(10),
@@ -34,7 +35,7 @@ class TransactionList extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -43,10 +44,7 @@ class TransactionList extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       tr.title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.title,
                     ),
                     Text(
                         DateFormat('d MMM y').format(tr.date), // Data formatada
