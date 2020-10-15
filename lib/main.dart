@@ -1,8 +1,10 @@
+import 'package:despesasps/components/chart.dart';
 import 'package:despesasps/components/transaction_form.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'components/transaction_list.dart';
 import 'components/transaction_form.dart';
+import 'components/chart.dart';
 import 'models/transaction.dart';
 
 main() => runApp(DespesasPessoais());
@@ -17,21 +19,26 @@ class DespesasPessoais extends StatelessWidget {
         primarySwatch: Colors.purple, // Cor principal com material color
         accentColor: Colors.amber, // Cor de realce do botão
         fontFamily: 'Quicksand',
-        textTheme: ThemeData.light().textTheme.copyWith( // Alterando fonte do titulo do card
-          title: TextStyle(
+        textTheme: ThemeData.light().textTheme.copyWith(
+            // Alterando fonte do titulo do card
+            title: TextStyle(
               fontFamily: 'OpenSans',
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
-        ),
-        appBarTheme: AppBarTheme( // Alterando fonte do nome do app
-          textTheme: ThemeData.light().textTheme.copyWith(
-            title: TextStyle(
-              fontFamily: 'OpenSans',
-              fontSize: 20,
+            button: TextStyle(
+              color: Colors.white,
               fontWeight: FontWeight.bold,
-            ),
-          ),
+            )),
+        appBarTheme: AppBarTheme(
+          // Alterando fonte do nome do app
+          textTheme: ThemeData.light().textTheme.copyWith(
+                title: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
         ),
       ),
     );
@@ -45,28 +52,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List <Transaction> _transactions = [
-    //Lista com modelo de Transações
-    // Transaction(
-    //   id: 't1',
-    //   title: 'Novo Tênis de Corrida',
-    //   value: 310.76,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'Conta de #01',
-    //   value: 211.30,
-    //   date: DateTime.now(),
-    // ),
-  ];
+  final List<Transaction> _transactions = [];
 
-  _addTransaction(String title, double value) {
+  List<Transaction> get _recentTransactions {
+    //Filtrar somente as transações recentes
+    return _transactions.where((tr) {
+      return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
+
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date,
     );
 
     setState(() {
@@ -74,6 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     Navigator.of(context).pop(); // Fechando Modal apos completar adição
+  }
+
+  _deleteTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((tr) => tr.id == id);
+    });
   }
 
   _opentransactionFormModal(BuildContext context) {
@@ -104,15 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
               CrossAxisAlignment.stretch, // Eixo de baixo para o lado
           children: <Widget>[
             // Lista
-            Container(
-              //Container que envolve toda a parte superior
-              child: Card(
-                color: Colors.blue,
-                child: Text('Gráfico'),
-                elevation: 5, //Ideia de elemento 3D
-              ),
-            ),
-            TransactionList(_transactions),
+            Chart(_recentTransactions),
+            TransactionList(_transactions, _deleteTransaction),
           ],
         ),
       ),
