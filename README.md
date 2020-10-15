@@ -1,6 +1,6 @@
 # Aplicativo Despesas Pessoais
 
-<h1 aling="center">
+<h1 align="center">
     <img src="assets/images/despesaspessoais.gif"></img>
 </h1>
 
