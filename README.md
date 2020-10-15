@@ -48,3 +48,5 @@ $yarn start
 - :up: Atualização
 - :beetle: Correção de bug
 - :checkered_flag: Release
+---
+Desenvolvido por Harlley dos Santos Bastos
